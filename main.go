@@ -13,6 +13,7 @@ import (
 
 	criu "github.com/checkpoint-restore/go-criu/v7"
 	"github.com/checkpoint-restore/go-criu/v7/rpc"
+	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"google.golang.org/protobuf/proto"
@@ -528,7 +529,7 @@ func verifyRestoration(containerName string) error {
 		fmt.Printf("  Started At: %s\n", containerJSON.State.StartedAt)
 
 		// Try to get container logs to verify it's working
-		options := container.LogsOptions{
+		options := types.ContainerLogsOptions{
 			ShowStdout: true,
 			ShowStderr: true,
 			Tail:       "10",

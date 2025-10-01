@@ -105,7 +105,7 @@ EOF
 # Build the checkpoint application
 build_application() {
     echo "Building the Docker checkpoint application..."
-    cd /home/ubuntu/Docker-container-checkpointing-with-Go-Criu
+    cd /home/ubuntu/lab3-docker-container-restoring-with-GO-criu
 
     # Download dependencies and create go.sum
     go mod tidy

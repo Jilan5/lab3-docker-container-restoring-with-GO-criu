@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,7 +13,6 @@ import (
 
 	criu "github.com/checkpoint-restore/go-criu/v7"
 	"github.com/checkpoint-restore/go-criu/v7/rpc"
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"google.golang.org/protobuf/proto"
@@ -469,7 +469,6 @@ func doCRIURestore(info *ContainerInfo, checkpointDir string) error {
 		},
 		ShellJob:       proto.Bool(true),
 		RstSibling:     proto.Bool(true),
-		RestoreDetached: proto.Bool(true),
 		CgRoot: []*rpc.CgroupRoot{
 			{
 				Ctrl: proto.String("cpu"),
@@ -540,7 +539,7 @@ func verifyRestoration(containerName string) error {
 			defer logs.Close()
 			fmt.Printf("\nRecent container logs:\n")
 			buf := make([]byte, 1024)
-			n, _ := logs.Read(buf)
+			n, _ := io.ReadFull(logs, buf)
 			if n > 0 {
 				fmt.Printf("%s\n", buf[:n])
 			}

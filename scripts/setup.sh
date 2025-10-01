@@ -32,13 +32,12 @@ install_docker() {
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io
         sudo usermod -aG docker $USER
         echo "Docker installed successfully!"
-        echo "Activating docker group for current session..."
-        newgrp docker
+        echo "Note: Please logout and login again for docker group changes to take effect"
     else
         echo "Docker is already installed"
         echo "Ensuring user is in docker group..."
         sudo usermod -aG docker $USER
-        newgrp docker
+        echo "Note: Please logout and login again for docker group changes to take effect"
     fi
 }
 
@@ -107,6 +106,7 @@ build_application() {
     echo "Building the Docker checkpoint application..."
     cd /home/ubuntu/lab3-docker-container-restoring-with-GO-criu
 
+
     # Download dependencies and create go.sum
     go mod tidy
     go mod download
@@ -150,7 +150,9 @@ main() {
     echo
     echo "=== Setup Complete ==="
     echo
-    echo "You can now use the checkpoint tool:"
+    echo "IMPORTANT: Please logout and login again (or run 'newgrp docker') to activate Docker group membership"
+    echo
+    echo "After re-login, you can use the checkpoint tool:"
     echo "  sudo ./docker-checkpoint -container <container-name>"
     echo
     echo "To run the test script:"
@@ -159,6 +161,7 @@ main() {
     echo "Example usage:"
     echo "  1. Start a container: docker run -d --name myapp alpine sleep 3600"
     echo "  2. Checkpoint it: sudo ./docker-checkpoint -container myapp"
+    echo "  3. Restore it: sudo ./docker-checkpoint -restore -container myapp -new-name myapp-restored"
     echo
 
    
